@@ -1,36 +1,105 @@
-<div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h2>
-  <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
-</div>
 
-<div class="row marketing">
-  <div class="col-lg-6">
-    <h4>Resources</h4>
-    <ul>
-      <li>
-        <a href="http://phoenixframework.org/docs/overview">Guides</a>
-      </li>
-      <li>
-        <a href="https://hexdocs.pm/phoenix">Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-    </ul>
-  </div>
+<!--
 
-  <div class="col-lg-6">
-    <h4>Help</h4>
-    <ul>
-      <li>
-        <a href="http://groups.google.com/group/phoenix-talk">Mailing list</a>
-      </li>
-      <li>
-        <a href="http://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">@elixirphoenix</a>
-      </li>
-    </ul>
-  </div>
-</div>
+<script src="lib/codemirror.js"></script>
+<link rel="stylesheet" href="lib/codemirror.css">
+<script src="mode/javascript/javascript.js"></script>
+-->
+
+
+<!--
+<script>
+
+$(document).ready(function() {
+  hljs.configure({
+    tabReplace: '  ', // 2 spaces
+    useBR: false});
+
+  $('pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+
+  $(".cpp").change(function() {
+    //alert( "Handler for .change() called." );
+    $('pre code').each(function(i, block) {
+      hljs.highlightBlock(block);
+    });
+    
+  });
+
+  $( "#code" ).click(function() {
+    $( ".cpp" ).change();
+  });
+
+  $("code").on("input", function() {
+     // var pos = getCaretPosition("code");
+     //var el = document.getElementById("code")
+     //var sel = document.getSelection();
+     // alert(sel.toString())
+     //$( ".cpp" ).change();
+     //sel.removeAllRanges();
+     //sel.addRange(sel.getRangeAt(0));
+     //el.focus();
+      //setCaretPosition("code",pos);
+});
+
+
+function getCaretPosition(id) {
+    var txt = document.getElementById(id);
+    var output = '';
+for (var property in txt) {
+  output += property + ': ' + txt[property]+'; ';
+}
+alert(output);
+    return {start: txt.offsetTop, end: txt.offset};
+}
+
+function setCaretPosition(id, pos) {
+    var txt = document.getElementById(id);
+    if(txt.createTextRange) {
+      var range = txt.createTextRange();
+      range.collapse(true);
+      range.moveEnd('character', pos.start);
+      range.moveStart('character', pos.end);
+      range.select();
+      return;
+    }
+
+    if(txt.selectionStart) {
+      txt.focus();
+      txt.setSelectionRange(pos.start, pos.end);
+    }
+}
+
+});
+</script> -->
+
+<script>
+(function() {
+   // your page initialization code here
+   // the DOM will be available here
+   alert("called");
+  //var myCodeMirror = CodeMirror(document.body);
+  var myCodeMirror = CodeMirror.fromTextArea(myTextArea);
+})();
+</script>
+
+<pre><code id="code" class="cpp" contenteditable="true">
+#include
+
+int main(int argc, char *argv[]) {
+
+  /* An annoying "Hello World" example */
+  for (auto i = 0; i < 0xFFFF; i++)
+    cout << "Hello, World!" << endl;
+
+  char c = '\n';
+  unordered_map <string, vector<string> > m;
+  m["key"] = "\\\\"; // this is an error
+
+  return -2e3 + 12l;
+}
+
+</code></pre>
+<div id="messages"></div>
+<input id="chat-input" type="text"></input>

@@ -13,9 +13,13 @@
 // to also remove its path from "config.paths.watched".
 import "phoenix_html"
 
+import "codemirror"
+import "codemirror/mode/javascript/javascript.js"
+import "codemirror/lib/codemirror.css"
+
 // Import local files
 //
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
 
-// import socket from "./socket"
+import socket from "./socket"
