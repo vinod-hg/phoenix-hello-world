@@ -13,9 +13,8 @@
 // to also remove its path from "config.paths.watched".
 import "phoenix_html"
 
-import "codemirror"
-import "codemirror/mode/javascript/javascript.js"
-import "codemirror/lib/codemirror.css"
+//import "codemirror"
+// import "codemirror/mode/javascript/javascript.js"
 
 // Import local files
 //
@@ -23,3 +22,4 @@ import "codemirror/lib/codemirror.css"
 // paths "./socket" or full ones "web/static/js/socket".
 
 import socket from "./socket"
+window.socket = socket
