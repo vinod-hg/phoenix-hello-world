@@ -44,6 +44,7 @@ for (var property in ph) {
 var room = "<%= @room %>";
 var user = "<%= @user %>";
 
+
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/web/endpoint.ex":
 socket.connect();
@@ -77,19 +78,18 @@ channel.on("new_msg", function (payload) {
   var output = '';
   var entry = payload;
   for (var property in entry) {
-    console.log(property + ":" + entry[property]);
     output += property + ":" + entry[property] + '; ';
   }
-  var output = '';
+  output += "---";
   var entry = payload.body;
   for (var property in entry) {
-    console.log(property + ":" + entry[property]);
     output += property + ":" + entry[property] + '; ';
   }
   console.log(output);
-  var messageItem = document.createElement("li");
-  messageItem.innerText = "[" + Date() + "] " + output;
-  messagesContainer.appendChild(messageItem);
+  //Add events to the messages
+  //var messageItem = document.createElement("li");
+  //messageItem.innerText = "[" + Date() + "] " + output;
+  //messagesContainer.appendChild(messageItem);
   switch(payload.body["origin"]) {
   case "+input":
   case "+delete":
@@ -110,16 +110,13 @@ channel.join().receive("ok", function (resp) {
 });
 
 
-
-
-
+// On editor change
 editor.on("change", function(e, changeObj) {
   if (changeObj["origin"] == null) {
     return;
   }
   var output = '';
   for (var property in changeObj) {
-    console.log(property + ":" + changeObj[property]);
     output += property + ":" + changeObj[property] +'; ';
   }
   console.log("----- " + output +" ------");
