@@ -1,4 +1,6 @@
 
+<h2>Hello <%= @user %>, from <%= @room %> room!</h2>
+</br>
 <form><textarea id="code" name="code">
 #include
 
@@ -39,16 +41,24 @@ for (var property in ph) {
 <script src="<%= static_path(@conn, "/js/codemirror/addon/hint/show-hint.js") %>"></script>
 <script src="<%= static_path(@conn, "/js/codemirror/mode/clike/clike.js") %>"></script>
 <script>
+var room = "<%= @room %>";
+var user = "<%= @user %>";
 
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/web/endpoint.ex":
 socket.connect();
 
 // Now that you are connected, you can join channels with a topic:
-var channel = socket.channel("room:lobby", {});
+var channel = socket.channel("room:" + room, {});
 
 var chatInput = document.querySelector("#chat-input");
 var messagesContainer = document.querySelector("#messages");
+var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+  lineNumbers: true,
+  extraKeys: {"Ctrl-Space": "autocomplete"},
+  mode: "text/x-csrc"
+});
+
 
 chatInput.addEventListener("keypress", function (event) {
   if (event.keyCode === 13) {
@@ -57,18 +67,40 @@ chatInput.addEventListener("keypress", function (event) {
   }
 });
 
-
+// Receive new message from channel
 channel.on("new_msg", function (payload) {
+  if (payload.user == null || payload.user == user) {
+    console.log("received from same user: " + payload.user);
+    return;
+  }
+  console.log("received payload: " + payload);
   var output = '';
-  var entry = payload.body["from"];
+  var entry = payload;
   for (var property in entry) {
-    console.log(property + ":" + entry[property].toString());
-    output += property + ":" + entry[property].toString() + '; ';
+    console.log(property + ":" + entry[property]);
+    output += property + ":" + entry[property] + '; ';
+  }
+  var output = '';
+  var entry = payload.body;
+  for (var property in entry) {
+    console.log(property + ":" + entry[property]);
+    output += property + ":" + entry[property] + '; ';
   }
   console.log(output);
   var messageItem = document.createElement("li");
   messageItem.innerText = "[" + Date() + "] " + output;
   messagesContainer.appendChild(messageItem);
+  switch(payload.body["origin"]) {
+  case "+input":
+  case "+delete":
+  case "paste":
+  case "undo":
+    editor.replaceRange(payload.body["text"], payload.body["from"], payload.body["to"]);
+    break;
+  default:
+    console.log("unknown origin" + origin);
+    alert(origin)
+  }
 });
 
 channel.join().receive("ok", function (resp) {
@@ -78,20 +110,20 @@ channel.join().receive("ok", function (resp) {
 });
 
 
-var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-  lineNumbers: true,
-  extraKeys: {"Ctrl-Space": "autocomplete"},
-  mode: "text/x-csrc"
-});
+
+
 
 editor.on("change", function(e, changeObj) {
-        var output = '';
-        //for (var property in changeObj) {
-        //  console.log(property + ":" + changeObj[property]);
-        //  output += property+'; ';
-       // }
-        console.log("--------");
-       channel.push("new_msg", {body: changeObj})
-      });
+  if (changeObj["origin"] == null) {
+    return;
+  }
+  var output = '';
+  for (var property in changeObj) {
+    console.log(property + ":" + changeObj[property]);
+    output += property + ":" + changeObj[property] +'; ';
+  }
+  console.log("----- " + output +" ------");
+  channel.push("new_msg", {user: user, body: changeObj})
+});
 
 </script>

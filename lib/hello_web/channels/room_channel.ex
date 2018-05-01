@@ -12,7 +12,7 @@ defmodule HelloWeb.RoomChannel do
   `:ignore` to deny subscription/broadcast on this channel
   for the requested topic
   """
-  def join("room:lobby", message, socket) do
+  def join("room:" <> _private_subtopic, message, socket) do
     Process.flag(:trap_exit, true)
     :timer.send_interval(5000, :ping)
     send(self(), {:after_join, message})
@@ -20,10 +20,10 @@ defmodule HelloWeb.RoomChannel do
     {:ok, socket}
   end
 
-  def join("room:" <> _private_subtopic, message, _socket) do
-    Logger.info"> error #{inspect message}"
-    {:error, %{reason: "unauthorized"}}
-  end
+  # def join("room:" <> _private_subtopic, message, _socket) do
+  #   Logger.info"> error #{inspect message}"
+  #   {:error, %{reason: "unauthorized"}}
+  # end
 
   def handle_info({:after_join, msg}, socket) do
     broadcast! socket, "user:entered", %{user: msg["user"]}
@@ -41,7 +41,7 @@ defmodule HelloWeb.RoomChannel do
   end
 
   def handle_in("new_msg", msg, socket) do
-    Logger.info"> received msg #{inspect msg}"
+    # Logger.info"> received msg #{inspect msg}"
     broadcast! socket, "new_msg", %{user: msg["user"], body: msg["body"]}
     {:reply, {:ok, %{msg: msg["body"]}}, assign(socket, :user, msg["user"])}
   end
