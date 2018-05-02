@@ -39,6 +39,7 @@ for (var property in ph) {
 <script src="<%= static_path(@conn, "/js/codemirror/addon/edit/matchbrackets.js") %>"></script>
 <link rel="stylesheet" href="<%= static_path(@conn, "/js/codemirror/addon/hint/show-hint.css") %>">
 <script src="<%= static_path(@conn, "/js/codemirror/addon/hint/show-hint.js") %>"></script>
+<script src="<%= static_path(@conn, "/js/codemirror/addon/selection/active-line.js") %>"></script>
 <script src="<%= static_path(@conn, "/js/codemirror/mode/clike/clike.js") %>"></script>
 <script>
 var room = "<%= @room %>";
@@ -55,6 +56,8 @@ var channel = socket.channel("room:" + room, {});
 var chatInput = document.querySelector("#chat-input");
 var messagesContainer = document.querySelector("#messages");
 var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+  styleActiveLine: true,
+  styleSelectedText: true,
   lineNumbers: true,
   extraKeys: {"Ctrl-Space": "autocomplete"},
   mode: "text/x-csrc"
@@ -68,6 +71,7 @@ chatInput.addEventListener("keypress", function (event) {
   }
 });
 
+var userMarkers = {};
 // Receive new message from channel
 channel.on("new_msg", function (payload) {
   if (payload.user == null || payload.user == user) {
@@ -86,20 +90,26 @@ channel.on("new_msg", function (payload) {
     output += property + ":" + entry[property] + '; ';
   }
   console.log(output);
-  //Add events to the messages
-  //var messageItem = document.createElement("li");
-  //messageItem.innerText = "[" + Date() + "] " + output;
-  //messagesContainer.appendChild(messageItem);
-  switch(payload.body["origin"]) {
+  switch(payload.body.origin) {
   case "+input":
   case "+delete":
   case "paste":
   case "undo":
-    editor.replaceRange(payload.body["text"], payload.body["from"], payload.body["to"]);
+    editor.replaceRange(payload.body.text, payload.body.from, payload.body.to);
+    break;
+  case "select":
+    if (userMarkers[payload.user] != null) {
+      userMarkers[payload.user].clear();
+    }
+    userMarkers[payload.user] = editor.getDoc().markText({line: payload.body.from.line, ch: payload.body.from.ch}, 
+                                    {line: payload.body.to.line, ch: payload.body.to.ch}, {css: "background : yellow"});
+    break;
+  case "unselect":
+    userMarkers[payload.user].clear();
     break;
   default:
-    console.log("unknown origin" + origin);
-    alert(origin)
+    console.log("Received unknown origin" + payload.body.origin);
+    alert(payload.body.origin)
   }
 });
 
@@ -111,7 +121,7 @@ channel.join().receive("ok", function (resp) {
 
 
 // On editor change
-editor.on("change", function(e, changeObj) {
+editor.on("change", function(cm, changeObj) {
   if (changeObj["origin"] == null) {
     return;
   }
@@ -122,5 +132,38 @@ editor.on("change", function(e, changeObj) {
   console.log("----- " + output +" ------");
   channel.push("new_msg", {user: user, body: changeObj})
 });
+console.log("*** Marking text *** ");
+  console.log("*** Marked text *** ");
+var selected = false;
+var selectFrom;
+var selectTo;
+editor.on("cursorActivity", function(cm) {
+  if (cm.somethingSelected()) {
+    selected = true;
+    var selFrom = cm.getCursor("from");
+    if(selectFrom != null && selFrom.line != selectFrom.line && selFrom.ch != selectFrom.ch) {
+    log(selFrom);
+    log(selectFrom);  
+      console.log("-- removed selection due to another select?--- ");
+      channel.push("new_msg", {user: user, body: {origin: "unselect", from: selectFrom, to: selectTo}});
+    }
+    selectFrom = selFrom;
+    selectTo = cm.getCursor("to");
+    console.log("--selected--- ");
+    channel.push("new_msg", {user: user, body: {origin: "select", from: selectFrom, to: selectTo}})
+  } else if (selected) {
+    console.log("-- removed selection--- ");
+    selected = false;
+    channel.push("new_msg", {user: user, body: {origin: "unselect", from: selectFrom, to: selectTo}})
+    selectFrom = selectTo = null
+  }
+});
 
+function log(object) {
+  var output = '';
+  for (var property in object) {
+    output += property + ":" + object[property] +'; ';
+  }
+  console.log("----- " + output +" ------");
+}
 </script>
