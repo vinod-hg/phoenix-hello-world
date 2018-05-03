@@ -56,6 +56,7 @@ var channel = socket.channel("room:" + room, {});
 var chatInput = document.querySelector("#chat-input");
 var messagesContainer = document.querySelector("#messages");
 var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+  //dragDrop: false,
   styleActiveLine: true,
   styleSelectedText: true,
   lineNumbers: true,
@@ -95,6 +96,8 @@ channel.on("new_msg", function (payload) {
   case "+delete":
   case "paste":
   case "undo":
+  case "cut":
+  case "drag":
     editor.replaceRange(payload.body.text, payload.body.from, payload.body.to);
     break;
   case "select":

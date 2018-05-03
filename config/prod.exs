@@ -17,8 +17,8 @@ config :hello, HelloWeb.Endpoint,
 # TODO: Add proper values for check_origin
   check_origin: false,
   load_from_system_env: true,
-  url: [scheme: "http", host: "rocky-reef-70053.herokuapp.com", port: 443],
-#  force_ssl: [rewrite_on: [:x_forwarded_proto]],
+  url: [scheme: "https", host: "joinedit.herokuapp.com", port: 443],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE")
 
