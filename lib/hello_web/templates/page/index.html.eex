@@ -1,3 +1,7 @@
+<script>
+var room = "<%= @room %>";
+var user = "<%= @user %>";
+</script>
 
 <h2>Hello <%= @user %>, from <%= @room %> room!</h2>
 </br>
@@ -24,6 +28,15 @@ int main(int argc, char *argv[]) {
 <div id="messages"></div>
 <input id="chat-input" type="text"></input>
 
+<div>
+  <video id="localVideo" autoplay></video>
+  <video id="remoteVideo" autoplay></video>
+
+  <button id="connect">Connect</button>
+  <button id="call">Call</button>
+  <button id="hangup">Hangup</button>
+</div>
+
 <!--
 
 var ph = require("phoenix_html");
@@ -34,10 +47,10 @@ for (var property in ph) {
         }
         alert(output);
 
--->
+
 
 <script src="<%= static_path(@conn, "/js/codemirror/addon/edit/matchbrackets.js") %>"></script>
-<link rel="stylesheet" href="<%= static_path(@conn, "/js/codemirror/addon/hint/show-hint.css") %>">
+
 <script src="<%= static_path(@conn, "/js/codemirror/addon/hint/show-hint.js") %>"></script>
 <script src="<%= static_path(@conn, "/js/codemirror/addon/selection/active-line.js") %>"></script>
 <script src="<%= static_path(@conn, "/js/codemirror/mode/clike/clike.js") %>"></script>
@@ -170,3 +183,4 @@ function log(object) {
   console.log("----- " + output +" ------");
 }
 </script>
+-->

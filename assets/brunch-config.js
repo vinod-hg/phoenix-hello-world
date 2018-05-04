@@ -8,12 +8,12 @@ exports.config = {
       // http://brunch.io/docs/config#-files-
       // joinTo: {
       //   "js/app.js": /^js/,
-      //   "js/vendor.js": /^(?!js)/,
+      //   //"js/vendor.js": /^(?!js)/,
       //   "js/codemirror.js": "node_modules/codemirror/lib/codemirror.js",
       //   //"js/javascript.js": "node_modules/codemirror/mode/javascript/javascript.js",
       // },
       
-      // To change the order of concatenation of files, explicitly mention here
+      // //To change the order of concatenation of files, explicitly mention here
       // order: {
       //   before: [
       //     "node_modules/codemirror/mode/javascript/javascript.js",

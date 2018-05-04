@@ -7,10 +7,12 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :hello, HelloWeb.Endpoint,
-  http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
+  https: [port: 4000, keyfile: "priv/server.key", certfile: "priv/server.pem"],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]],
+  secret_key_base: "CoMAiM+yJVpgecO8s60fiBUrEcwCda1xFjpMNZqV+Oec1EJ0gaAAaEZ+0jWj+z2A",
   watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
                     cd: Path.expand("../assets", __DIR__)]]
 
@@ -56,3 +58,6 @@ config :hello, Hello.Repo,
   database: "hello_dev",
   hostname: "localhost",
   pool_size: 10
+
+
+# mix phx.gen.schema Room rooms name:string users:string data:binary
