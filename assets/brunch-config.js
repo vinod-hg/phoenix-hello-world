@@ -55,7 +55,6 @@ exports.config = {
       "js/codemirror/mode" : ["node_modules/codemirror/mode"],
       "js/codemirror/addon" : ["node_modules/codemirror/addon"],
       "css": ["node_modules/codemirror/lib/codemirror.css"],
-      verbose : true, //shows each file that is copied to the destination directory
       onlyChanged: true //only copy a file if it's modified time has changed (only effective when using brunch watch)
     }
   },

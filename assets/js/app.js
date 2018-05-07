@@ -54,7 +54,7 @@ hangupButton.onclick = hangup;
 socket.connect();
 
 // Now that you are connected, you can join channels with a topic:
-var channel = socket.channel("room:" + room, {});
+var channel = socket.channel("room:" + room, {user: user});
 
 var chatInput = document.querySelector("#chat-input");
 var messagesContainer = document.querySelector("#messages");
@@ -78,10 +78,10 @@ chatInput.addEventListener("keypress", function (event) {
 var userMarkers = {};
 // Receive new message from channel
 channel.on("new_msg", function (payload) {
-  if (payload.user == null || payload.user == user) {
-    console.log("received from same user: " + payload.user);
-    return;
-  }
+  // if (payload.user == null || payload.user == user) {
+  //   console.log("received from same user: " + payload.user);
+  //   return;
+  // }
   console.log("received payload: " + payload);
   var output = '';
   var entry = payload;

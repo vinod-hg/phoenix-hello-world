@@ -14,6 +14,8 @@ defmodule Hello.Application do
       supervisor(HelloWeb.Endpoint, []),
       # Start your own worker by calling: Hello.Worker.start_link(arg1, arg2, arg3)
       # worker(Hello.Worker, [arg1, arg2, arg3]),
+      {DynamicSupervisor, strategy: :one_for_one, name: Hello.RoomOwnerSup}
+
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

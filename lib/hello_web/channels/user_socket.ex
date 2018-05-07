@@ -21,8 +21,8 @@ defmodule HelloWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(%{"token" => token}, socket) do
-    IO.inspect "here connect"
+  def connect(%{"token" => token} = params, socket) do
+    Logger.info"> connecting #{inspect params}"
     # max_age: 1209600 is equivalent to two weeks in seconds
     case Phoenix.Token.verify(socket, "user socket", token, max_age: 1209600) do
       {:ok, user_id} ->

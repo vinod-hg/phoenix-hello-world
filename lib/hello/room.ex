@@ -15,6 +15,6 @@ defmodule Hello.Room do
   def changeset(room, attrs) do
     room
     |> cast(attrs, [:name, :users, :data])
-    |> validate_required([:name, :users, :data])
+    |> validate_required([:name, :users])
   end
 end
