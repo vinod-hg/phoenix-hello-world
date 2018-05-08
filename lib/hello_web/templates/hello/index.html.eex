@@ -1,3 +1,21 @@
-<div class="jumbotron">
+<!--<div class="jumbotron">
     <h2>Welcome, from Join edit team!</h2>
-</div>
+</div> -->
+<html>
+    <div id=banner class="hero-image">
+
+    <!--<h2 style="width:728px; height:90px; padding:15px; background-color:orange; color: white"> -->
+    <h2>
+    <img src="/images/logoJoinEdit.jpg" alt = "Welcome, from Join Edit team!">
+    <div align="right"><a href="login">Login</a></div>
+    </h2>
+    
+    </div>
+    <div id=joinroom>
+        <form id=joinroomform>
+            <input type="text" id=rname name="roomname" placeholder="Room Name"><br><br>
+            <input type="text" id=unae name="username" placeholder="User Name"><br><br>
+            <button style="background-color:orange"> Join Room</button>
+        </form>
+    </div>
+</html>

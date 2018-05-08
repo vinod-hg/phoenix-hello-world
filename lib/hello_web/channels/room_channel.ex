@@ -18,6 +18,8 @@ defmodule HelloWeb.RoomChannel do
     user = msg["user"]
     socket = assign(socket, :room, room_name)
               |> assign(:user, user)
+              |> assign(:client_counter, 0)
+              |> assign(:new_msg_buffer, :ordsets.new())
     Hello.RoomOwnerSup.start_room(room_name)
     res = Hello.RoomOwner.new_user(room_name, user)
       # case Hello.Repo.all(from(r in Hello.Room, where: r.name == ^room_name, select: r)) do
@@ -97,9 +99,27 @@ defmodule HelloWeb.RoomChannel do
   end
 
   def handle_in("new_msg", msg, socket) do
-    # Logger.info"> received msg #{inspect msg}"
-    Hello.RoomOwner.new_msg(socket.assigns[:room], msg)
-    broadcast_from!(socket, "new_msg", %{user: msg["user"], body: msg["body"]})
+    client_counter = socket.assigns[:client_counter]
+    socket =
+      if msg["counter"] == client_counter + 1 do
+        counter = Hello.RoomOwner.new_msg(socket.assigns[:room], msg)
+        Logger.info("In #{inspect [counter, msg["counter"], msg["body"]["text"]]}")
+        broadcast_from!(socket, "new_msg", %{user: msg["user"], counter: counter, body: msg["body"]})
+        socket = assign(socket, :client_counter, client_counter + 1)
+        # take next msg from queue. Process if it is next message in queue
+        case socket.assigns[:new_msg_buffer] do
+          [{_, next_msg} | msg_buffer] ->
+            socket = assign(socket, :new_msg_buffer, msg_buffer)
+            {_, _, socket} = handle_in("new_msg", next_msg, socket)
+            socket
+          [] ->
+            socket
+        end
+      else
+        Logger.info("Queued #{inspect [client_counter, msg["counter"], msg["body"]["text"]]}")
+        msg_buffer = socket.assigns[:new_msg_buffer]
+        assign(socket, :new_msg_buffer, :ordsets.add_element({msg["counter"], msg}, msg_buffer))
+      end
     {:reply, {:ok, %{msg: msg["body"]}}, socket}
   end
 
@@ -114,16 +134,22 @@ defmodule HelloWeb.RoomChannel do
   def handle_out("user_joined", msg, socket) do
     Logger.info("> user joined #{inspect(msg)}")
 
-    if Accounts.ignoring_user?(socket.assigns[:user], msg.user_id) do
-      {:noreply, socket}
-    else
+    # if Accounts.ignoring_user?(socket.assigns[:user], msg.user_id) do
+    #   {:noreply, socket}
+    # else
       push(socket, "user_joined", msg)
       {:noreply, socket}
-    end
+    # end
   end
   def handle_out("new_msg", msg, socket) do
-    #Logger.info("Out #{inspect msg}")
+    if socket.assigns[:user] == "vin1" do
+      Logger.info("Out #{inspect [msg[:counter], msg[:body]["text"]]}")
+    end
+    if is_integer(socket.assigns[:counter]) and msg[:counter] != socket.assigns[:counter] + 1 do
+      Logger.info("#{inspect [msg, socket.assigns[:user], socket.assigns[:counter]]}")
+    end
     push socket, "new_msg", msg
+    socket = assign(socket, :counter, socket.assigns[:counter])
     {:noreply, socket}
   end
 end

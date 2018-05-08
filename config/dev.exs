@@ -44,7 +44,7 @@ config :hello, HelloWeb.Endpoint,
   ]
 
 # Do not include metadata nor timestamps in development logs
-config :logger,:console, format: "[$level]$metadata > $message\n",
+config :logger,:console, format: "$time [$level]$metadata > $message\n",
   metadata: [:pid]
 
 # Set a higher stacktrace during development. Avoid configuring such

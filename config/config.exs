@@ -20,7 +20,7 @@ config :hello, HelloWeb.Endpoint,
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:user_id]
+  metadata: [:user_id], level: :info
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

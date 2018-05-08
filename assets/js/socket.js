@@ -3,10 +3,22 @@
 
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/web/endpoint.ex":
-import {Socket, LongPoll} from "phoenix"
+// import {Socket, LongPoll} from "phoenix"
 
-let socket = new Socket("/socket", {transport: LongPoll, params: {token: window.userToken}})
+// let socket = new Socket("/socket", {params: {token: window.userToken}})
 
+// let retry_count = 0
+// socket.onError(error => {
+//     console.log(error, retry_count)
+//     if (retry_count == 3) {
+//         socket.disconnect()
+//         console.log("connecting with longpoll")
+//         socket = new Socket("/socket", {transport: LongPoll, params: {token: window.userToken}})
+//         var resp = socket.connect()
+//         console.log(resp)
+//     }
+//     retry_count++
+// })
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
 // which authenticates the session and assigns a `:current_user`.
@@ -51,7 +63,8 @@ let socket = new Socket("/socket", {transport: LongPoll, params: {token: window.
 // Finally, pass the token on connect as below. Or remove it
 // from connect if you don't care about authentication.
 
-socket.connect()
+// var resp = socket.connect()
+// console.log(resp)
 
 // Now that you are connected, you can join channels with a topic:
 // let channel = socket.channel("room:lobby", {})
@@ -84,4 +97,4 @@ socket.connect()
 //   .receive("ok", resp => { console.log("Joined successfully", resp) })
 //   .receive("error", resp => { console.log("Unable to join", resp) })
 
-export default socket
+// export default socket
