@@ -11,6 +11,7 @@
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
+//import jQuery from "jquery"
 import "phoenix_html"
 import "phoenix"
 import {Socket, LongPoll} from "phoenix"

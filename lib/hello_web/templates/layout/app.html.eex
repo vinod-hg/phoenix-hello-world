@@ -17,15 +17,15 @@
   <body>
     <script>window.userToken = "<%= assigns[:user_token] %>";</script>
 
-    <div class="container">
-      <header class="header">
+    <!--<div class="container">
+      <!--<header class="header">
         <nav role="navigation">
           <ul class="nav nav-pills">
             <li><a href="http://www.joinedit.com">Join Edit</a></li>
           </ul>
         </nav>
         <span class="joineditlogo"></span>
-      </header>
+      </header>-->
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
@@ -34,7 +34,39 @@
         <%= render @view_module, @view_template, assigns %>
       </main>
 
-    </div> <!-- /container -->
+    <!--</div> <!-- /container -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+
+    <script src="vendor/semantic/dist/components/visibility.js"></script>
+    <script src="vendor/semantic/dist/components/sidebar.js"></script>
+    <script src="vendor/semantic/dist/components/transition.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            // fix menu when passed
+            $('.masthead').visibility({
+                once: false,
+                onBottomPassed: function() {
+                    $('.fixed.menu').transition('fade in');
+                },
+                onBottomPassedReverse: function() {
+                    $('.fixed.menu').transition('fade out');
+                }
+            });
+
+            // create sidebar and attach to menu open
+            $('.ui.sidebar').sidebar('attach events', '.toc.item');
+          
+            $('.ui.huge.primary.button').on('click', function () {
+              $('.ui.mini.modal').modal('show');
+            })
+            $('.ui.small.primary.button').on('click', function() {
+              var user = $('.ui.form').form('get value', 'username');
+              var url = 'myroom101/' + user;
+              location.href=url;
+            })
+        });
+    </script>
+
   </body>
 </html>
