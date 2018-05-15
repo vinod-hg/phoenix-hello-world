@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+      <link rel="stylesheet" href="<%= static_path(@conn, "/css/codemirror.css") %>">
+      <link rel="stylesheet" href="<%= static_path(@conn, "/js/codemirror/addon/hint/show-hint.css") %>">
       <script>
       var room = "<%= @room %>";
       var user = "<%= @user %>";

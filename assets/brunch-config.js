@@ -22,7 +22,11 @@ exports.config = {
       // }
     },
     stylesheets: {
-      joinTo: 'css/app.css'
+      joinTo: {
+        'css/app.css': /^css/,
+        'css/codemirror.css': "node_modules/codemirror/lib/codemirror.css",
+        'css/semantic.min.css': "vendor/semantic/dist/semantic.min.css",
+      }
     },
     templates: {
       joinTo: "js/app.js"
@@ -39,7 +43,7 @@ exports.config = {
   // Phoenix paths configuration
   paths: {
     // Dependencies and current project directories to watch
-    watched: ["static", "css", "js", "vendor"],
+    watched: ["static", "css", "js"],
     // Where to compile files to
     public: "../priv/static"
   },
