@@ -1,11 +1,89 @@
-<script>
-var room = "<%= @room %>";
-var user = "<%= @user %>";
-</script>
+<!DOCTYPE html>
+<html>
+    <head>
+      <script>
+      var room = "<%= @room %>";
+      var user = "<%= @user %>";
+      </script>
+      <style type="text/css">
+      body {
+            padding: 1em;
+          }
+      .ui.grid > .column:not(.row),
+      .ui.grid > .row > .column {
+        padding-left: 0.2rem;
+        padding-right: 0.2rem;
+        padding-top: 0.4rem;
+        padding-bottom: 0rem;
+      }
+      .CodeMirror {
+        height: 100%;
+      }
+      .userlist {
+        font-size: 0.9rem;
+      }
+      .fullscreen {
+        height: calc(80vh )
+      }
+      .ui.three.item.list {
+        height: calc(10vh);
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+      .ui.height.comments {
+        height: calc(50vh);
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+      .ui.chat {
+        height: calc(10vh);
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+      .ui.compact.segment {
+        padding-top: 0rem;
+        padding-bottom: 0rem;
+        margin: 0em 0em;
+        margin-bottom: 0.4em;
+        width: 100%;
+      }
+      .ui.form .field {
+        margin: 0em 0em;
+        margin-bottom: 0.2em;
+      }
+    </style>
+    </head>
+    <body>
+<!-- Following Menu -->
+    <div class="ui tiny top fixed  menu">
+        <div class="ui container">
+            <a class="active item">Home</a>
+            <a class="item">Work</a>
+            <a class="item">Company</a>
+            <a class="item">Careers</a>
+            <div class="right menu">
+                <div class="item">
+                    <a class="ui button">Log in</a>
+                </div>
+                <div class="item">
+                    <a class="ui primary button">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </br>
+  <div class="ui visible message">
+    <p>Hello <%= @user %>, from <%= @room %> room!</p>
+  </div>
 
-<h2>Hello <%= @user %>, from <%= @room %> room!</h2>
-</br>
-<form><textarea id="code" name="code">
+<div class="ui height grid">
+  <div class="one wide left floated column">
+    <div class="ui segment">
+    </div>
+  </div>
+  <div class="twelve wide column">
+    <div class="ui fullscreen segment">
+    <textarea id="code" name="code" style="height:100%">
 #include
 
 int main(int argc, char *argv[]) {
@@ -21,11 +99,110 @@ int main(int argc, char *argv[]) {
   return -2e3 + 12l;
 }
 
-</textarea></form>
+    </textarea>
 
+    </div>
+  </div>
 
-
-<div id="messages"></div>
+ <div class="three wide right floated column">
+    <div class="ui compact segment">
+      <div class="ui three item list right">
+        <div class="item">
+          <img class="ui avatar image" src="/images/avatar2/small/rachel.png">
+          <div class="content">
+            <a class="description userlist">Rachel</a>
+          </div>
+        </div>
+        <div class="item">
+          <img class="ui avatar image" src="/images/avatar2/small/lindsay.png">
+          <div class="content userlist">
+            <a class="description userlist">Lindsay</a>
+          </div>
+        </div>
+        <div class="item">
+          <img class="ui avatar image" src="/images/avatar2/small/matthew.png">
+          <div class="content">
+            <a class="description userlist">Matthew</a>
+          </div>
+        </div>
+        <div class="item">
+          <img class="ui avatar image" src="/images/avatar/small/jenny.jpg">
+          <div class="content">
+            <a class="description userlist">Jenny Hess</a>
+          </div>
+        </div>
+        <div class="item">
+          <img class="ui avatar image" src="/images/avatar/small/veronika.jpg">
+          <div class="content">
+            <a class="description userlist">Veronika Ossi</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class="ui compact segment height comments">
+  <!-- <h3 class="ui dividing header">Comments</h3> -->
+  <div class="comment">
+    <div class="content">
+      <a class="author">Matt</a>
+      <div class="metadata">
+        <span class="date">Today at 5:42PM</span>
+      </div>
+      <div class="text">
+        How artistic!
+      </div>
+    </div>
+  </div>
+  <div class="comment">
+    <div class="content">
+      <a class="author">Elliot Fu</a>
+      <div class="metadata">
+        <span class="date">Yesterday at 12:30AM</span>
+      </div>
+      <div class="text">
+        <p>This has been very useful for my research. Thanks as well!</p>
+      </div>
+    </div>
+      <div class="comment">
+        <div class="content">
+          <a class="author">Jenny Hess</a>
+          <div class="metadata">
+            <span class="date">Just now</span>
+          </div>
+          <div class="text">
+            Elliot you are always so right :)
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="comment">
+    <div class="content">
+      <a class="author">Joe Henderson</a>
+      <div class="metadata">
+        <span class="date">5 days ago</span>
+      </div>
+      <div class="text">
+        Dude, this is awesome. Thanks so much
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+ <div class="ui compact segement">
+  <form class="ui reply form">
+    <div class="aligned left field">
+      <textarea class="ui chat" rows="2"></textarea> 
+    </div>
+    <div class="ui one width column blue labeled tiny submit icon button">
+      <i class="icon edit"></i> Add Reply
+    </div>
+  </form>
+ </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!--<div id="messages"></div>
 <input id="chat-input" type="text"></input>
 
 <div>
@@ -36,7 +213,7 @@ int main(int argc, char *argv[]) {
   <button id="call">Call</button>
   <button id="hangup">Hangup</button>
 </div>
-
+-->
 <!--
 
 var ph = require("phoenix_html");
