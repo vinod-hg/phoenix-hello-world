@@ -60,6 +60,7 @@ exports.config = {
       "js/codemirror/addon" : ["node_modules/codemirror/addon"],
       "css": ["node_modules/codemirror/lib/codemirror.css"],
       "vendor/semantic/dist": ["vendor/semantic/dist"],
+      "vendor/js": ["vendor/js"],
       onlyChanged: true //only copy a file if it's modified time has changed (only effective when using brunch watch)
     }
   },

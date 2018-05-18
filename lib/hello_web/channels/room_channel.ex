@@ -61,8 +61,8 @@ defmodule HelloWeb.RoomChannel do
   # end
 
   def handle_info({:after_join, _room_name, msg, users}, socket) do
-    broadcast!(socket, "user:entered", %{user: msg["user"]})
-    push(socket, "join", %{status: "connected", users: users})
+    broadcast_from!(socket, "user:new", %{user: msg["user"]})
+    push(socket, "users", %{status: "connected", users: users})
     list = Hello.RoomOwner.get_all_msgs(socket.assigns[:room])
     Logger.info("> Msgs in queue #{inspect(users)}")
     Enum.each(list, fn {_counter, qmsg} ->
@@ -79,6 +79,7 @@ defmodule HelloWeb.RoomChannel do
 
   def terminate(reason, socket) do
     resp = Hello.RoomOwner.user_left(socket.assigns[:room], socket.assigns[:user])
+    broadcast_from!(socket, "user:left", %{user: socket.assigns[:user]})
     Logger.info("> leave #{inspect([reason, resp])}")
     # case Hello.Repo.all(from(r in Hello.Room, where: r.name == ^socket.assigns[:room], select: r)) do
     #   [] ->
@@ -141,6 +142,8 @@ defmodule HelloWeb.RoomChannel do
       {:noreply, socket}
     # end
   end
+
+  # log the message order
   def handle_out("new_msg", msg, socket) do
     if socket.assigns[:user] == "vin1" do
       Logger.info("Out #{inspect [msg[:counter], msg[:body]["text"]]}")

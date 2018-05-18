@@ -11,8 +11,8 @@
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
-//import jQuery from "jquery"
-import "phoenix_html"
+// import jQuery from "jquery"
+//import "phoenix_html"
 import "phoenix"
 import {Socket, LongPoll} from "phoenix"
 
@@ -33,11 +33,6 @@ import "codemirror/mode/clike/clike.js"
 // import socket from "./socket"
 // window.socket = socket
 
-/* <script src="<%= static_path(@conn, "/js/codemirror/addon/edit/matchbrackets.js") %>"></script>
-
-<script src="<%= static_path(@conn, "/js/codemirror/addon/hint/show-hint.js") %>"></script>
-<script src="<%= static_path(@conn, "/js/codemirror/addon/selection/active-line.js") %>"></script>
-<script src="<%= static_path(@conn, "/js/codemirror/mode/clike/clike.js") %>"></script> */
 export class RoomChannel {
   get chan() {
      return this._chan;
@@ -70,7 +65,11 @@ function onSocketOpen() {
   console.log("Socket connected successfully")
   // Now that you are connected, you can join channels with a topic:
   channel.chan = socket.channel("room:" + room, {user: user});
-  channel.chan.on("new_msg", channelNewMsg)
+  channel.chan.on("new_msg", channelNewMsg);
+  channel.chan.on("user:new", channelUserNew);
+  channel.chan.on("user:left", channelUserLeft);
+  channel.chan.on("msg:new", channelAddMessage);
+  channel.chan.on("users", channelUsers);
 
   channel.chan.join().receive("ok", function (resp) {
     console.log("Joined successfully", resp);
@@ -79,6 +78,39 @@ function onSocketOpen() {
   });
 }
 
+function channelUserNew(payload) {
+  addUser(payload.user);
+}
+function channelUserLeft(payload) {
+  $('#' + payload.user).remove();
+}
+function channelUsers(payload) {
+  for (var i in payload.users) {
+    addUser(payload.users[i]);
+  }
+}
+
+function addUser(user) {
+  $('#users').append(
+    '<div class="item" id='+ user +'>\
+      <div class="header">\
+        <a class="description userlist">' + user + '</a>\
+      </div>\
+    </div>');
+}
+
+function channelAddMessage(payload) {
+  $('#msgs').append(
+    '<div class="comment">\
+    <div class="content">\
+      <a class="author">'+ payload.user +'</a>\
+      <div class="metadata">\
+        <span class="date">'+ payload.time +'</span>\
+      </div>\
+      <div class="text">'+ payload.msg +'</div>\
+    </div>\
+  </div>');
+}
 
 var chatInput = document.querySelector("#chat-input");
 var messagesContainer = document.querySelector("#messages");
@@ -92,12 +124,12 @@ var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 });
 
 
-chatInput.addEventListener("keypress", function (event) {
-  if (event.keyCode === 13) {
-    channel.chan.push("new_msg", { body: chatInput.value });
-    chatInput.value = "";
-  }
-});
+// chatInput.addEventListener("keypress", function (event) {
+//   if (event.keyCode === 13) {
+//     channel.chan.push("new_msg", { body: chatInput.value });
+//     chatInput.value = "";
+//   }
+// });
 
 var prevcounter=0;
 var userMarkers = {};
@@ -143,7 +175,7 @@ function channelNewMsg(payload) {
     break;
   default:
     console.log("Received unknown origin" + payload.body.origin);
-    alert(payload.body.origin)
+    alert("Received unknown origin" + payload.body.origin)
   }
 }
 
@@ -200,4 +232,5 @@ function log(object) {
     output += property + ":" + object[property] +'; ';
   }
   console.log("----- " + output +" ------");
+  return output;
 }

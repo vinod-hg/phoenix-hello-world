@@ -56,7 +56,7 @@ defmodule Hello.RoomOwner do
   end
 
   def handle_call({:new_user, user}, _from, state = room_state(users: users)) do
-    users = [user | users]
+    users = users ++ [user]
     {:reply, {:ok, users}, room_state(state, users: users)}
   end
 
