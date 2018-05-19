@@ -85,6 +85,7 @@ function channelUserLeft(payload) {
   $('#' + payload.user).remove();
 }
 function channelUsers(payload) {
+  $('#users').empty();
   for (var i in payload.users) {
     addUser(payload.users[i]);
   }
@@ -97,19 +98,40 @@ function addUser(user) {
         <a class="description userlist">' + user + '</a>\
       </div>\
     </div>');
+  $('#users').animate({scrollTop: $('#users').prop("scrollHeight")}, 1);
 }
 
 function channelAddMessage(payload) {
+  var dt = new Date(payload.time);
+  var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
   $('#msgs').append(
     '<div class="comment">\
     <div class="content">\
       <a class="author">'+ payload.user +'</a>\
       <div class="metadata">\
-        <span class="date">'+ payload.time +'</span>\
+        <span class="date">'+ time +'</span>\
       </div>\
       <div class="text">'+ payload.msg +'</div>\
     </div>\
   </div>');
+  $('#msgs').animate({scrollTop: $('#msgs').prop("scrollHeight")}, 1);
+}
+
+$('.ui.chat.button').on('click', function () {
+  sendMsg();
+})
+
+$('.ui.fluid.action.input').on('keypress', function (event) {
+  if (event.shiftKey === false && event.keyCode === 13) {
+    sendMsg();
+  }
+})
+
+function sendMsg() {
+  var msg = { user: user, time: new Date(), msg: $('#chatinput').val() };
+  channel.chan.push("msg:new", msg);
+  $('#chatinput').val('');
+  channelAddMessage(msg);
 }
 
 var chatInput = document.querySelector("#chat-input");

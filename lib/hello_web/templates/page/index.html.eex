@@ -28,17 +28,17 @@
       .fullscreen {
         height: calc(80vh )
       }
-      .ui.three.item.list {
-        height: calc(10vh);
+      .ui.two.item.list {
+        height: calc(6vh);
         overflow-y: scroll;
-        overflow-x: hidden;
+        /*overflow-x: hidden;*/
       }
       .ui.height.comments {
-        height: calc(50vh);
+        height: calc(68vh);
         overflow-y: scroll;
-        overflow-x: hidden;
+        /*overflow-x: hidden;*/
       }
-      .ui.chat {
+      .ui.chat.textarea {
         /*height: calc(10vh);
         overflow-y: scroll;
         overflow-x: hidden;*/
@@ -59,6 +59,10 @@
       .ui.form .field {
         margin: 0em 0em;
         margin-bottom: 0.2em;
+      }
+      ui.fixed.segment {
+        height: calc(80vh );
+        overflow-y: scroll;
       }
 
     </style>
@@ -86,49 +90,61 @@
               var url = 'myroom101/' + user;
               location.href=url;
             })
+
+            
         });
+
+        function log(object) {
+  var output = '';
+  for (var property in object) {
+    output += property + ":" + object[property] +'; ';
+  }
+  console.log("----- " + output +" ------");
+  return output;
+}
     </script>
     </head>
-    <body class="pushable">
+
+<body class="pushable">
   <!-- Sidebar Menu -->
-        <div class="ui vertical inverted sidebar menu">
-            <a class="active item">Home</a>
-            <a class="item">Work</a>
-            <a class="item">Company</a>
-            <a class="item">Careers</a>
-            <a class="item">Login</a>
-            <a class="item">Signup</a>
-        </div>
-  <div class="child pusher">
-            <div class="ui inverted vertical child masthead center aligned segment">
-                <div class="ui container">
-                    <div class="ui large secondary inverted pointing menu">
-                        <a class="toc item">
-                            <i class="sidebar icon"></i>
-                        </a>
-                        <a class="active item">Home</a>
-                        <a class="item">Work</a>
-                        <a class="item">Company</a>
-                        <a class="item">Careers</a>
-                        <div class="right item">
-                            <a class="ui inverted button">Log in</a>
-                            <a class="ui inverted button">Sign Up</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-</br>
-<div class="ui height grid">
-  <div class="sixteen wide column">
-    <div class="ui tiny visible message">
-      <p>Hello <%= @user %>, welcome to <%= @room %>!</p>
-    </div>
+  <div class="ui vertical inverted sidebar menu">
+      <a class="active item">Home</a>
+      <a class="item">Work</a>
+      <a class="item">Company</a>
+      <a class="item">Careers</a>
+      <a class="item">Login</a>
+      <a class="item">Signup</a>
   </div>
-  <div class="twelve wide column">
-    <div class="ui compact segment">
+  <div class="child pusher">
+    <div class="ui inverted vertical child masthead center aligned segment">
+      <div class="ui container">
+        <div class="ui large secondary inverted pointing menu">
+          <a class="toc item">
+              <i class="sidebar icon"></i>
+          </a>
+          <a class="active item">Home</a>
+          <a class="item">Work</a>
+          <a class="item">Company</a>
+          <a class="item">Careers</a>
+          <div class="right item">
+              <a class="ui inverted button">Log in</a>
+              <a class="ui inverted button">Sign Up</a>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="ui fullscreen segment">
-    <textarea id="code" name="code" style="height:100%">
+    </br>
+    <div class="ui height grid">
+      <div class="sixteen wide column">
+        <div class="ui tiny visible message">
+          <p>Hello <%= @user %>, welcome to <%= @room %>!</p>
+        </div>
+      </div>
+      <div class="twelve wide column">
+        <div class="ui compact segment">
+        </div>
+        <div class="ui fullscreen segment">
+        <textarea id="code" name="code" style="height:100%">
 #include
 
 int main(int argc, char *argv[]) {
@@ -143,274 +159,27 @@ int main(int argc, char *argv[]) {
 
   return -2e3 + 12l;
 }
+        </textarea>
+        </div>
+      </div>
 
-    </textarea>
-
+      <div class="four wide right column">
+        <div class="ui compact segment">
+          <div id="users" class="ui two item list right">
+          </div>
+        </div>
+        <div class="ui compact segment">
+          <div id="msgs" class="ui compact height comments"></div>
+        </div>
+        <div class="ui compact segement">
+          <div class="ui fluid action input">
+            <textarea class="ui chat textarea" id="chatinput"></textarea> 
+            <div class="ui large blue chat button"><i class="right arrow icon"></i></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
- <div class="four wide right floated column">
-    <div class="ui compact segment">
-      <div id="users" class="ui two item list right">
-        <!--<div class="item">
-          <img class="ui avatar image" src="/images/avatar2/small/rachel.png">
-          <div class="content">
-            <a class="description userlist">Rachel</a>
-          </div>
-        </div>
-        <div class="item">
-          <img class="ui avatar image" src="/images/avatar2/small/lindsay.png">
-          <div class="content userlist">
-            <a class="description userlist">Lindsay</a>
-          </div>
-        </div>
-        <div class="item">
-          <img class="ui avatar image" src="/images/avatar2/small/matthew.png">
-          <div class="content">
-            <a class="description userlist">Matthew</a>
-          </div>
-        </div>
-        <div class="item">
-          <img class="ui avatar image" src="/images/avatar/small/jenny.jpg">
-          <div class="content">
-            <a class="description userlist">Jenny Hess</a>
-          </div>
-        </div>
-        <div class="item">
-          <img class="ui avatar image" src="/images/avatar/small/veronika.jpg">
-          <div class="content">
-            <a class="description userlist">Veronika Ossi</a>
-          </div>
-        </div> -->
-      </div>
-    </div>
-  <div class="ui compact segment height comments">
-  <!-- <h3 class="ui dividing header">Comments</h3> -->
-  <!--<div class="comment">
-    <div class="content">
-      <a class="author">Matt</a>
-      <div class="metadata">
-        <span class="date">Today at 5:42PM</span>
-      </div>
-      <div class="text">
-        How artistic!
-      </div>
-    </div>
-  </div>
-  <div class="comment">
-    <div class="content">
-      <a class="author">Elliot Fu</a>
-      <div class="metadata">
-        <span class="date">Yesterday at 12:30AM</span>
-      </div>
-      <div class="text">
-        <p>This has been very useful for my research. Thanks as well!</p>
-      </div>
-    </div>
-      <div class="comment">
-        <div class="content">
-          <a class="author">Jenny Hess</a>
-          <div class="metadata">
-            <span class="date">Just now</span>
-          </div>
-          <div class="text">
-            Elliot you are always so right :)
-          </div>
-        </div>
-      </div>
-  </div>
-  <div class="comment">
-    <div class="content">
-      <a class="author">Joe Henderson</a>
-      <div class="metadata">
-        <span class="date">5 days ago</span>
-      </div>
-      <div class="text">
-        Dude, this is awesome. Thanks so much
-      </div>
-    </div>
-  </div> -->
-</div>
-<div>
- <div class="ui compact segement">
- <div class="ui fluid action input">
-  <textarea class="ui chat"></textarea> 
-  <div class="ui large blue button"><i class="right arrow icon"></i></div>
-</div>
-<!--
-  <form class="ui reply form">
-    <div class="aligned left floated field">
-      <textarea class="ui chat" rows="2"></textarea> 
-    </div>
-    <div class="ui aligned right floated one width column blue tiny submit icon button">
-      <i class="right arrow icon"></i>
-    </div>
-  </form> -->
- </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!--<div id="messages"></div>
-<input id="chat-input" type="text"></input>
-
-<div>
-  <video id="localVideo" autoplay></video>
-  <video id="remoteVideo" autoplay></video>
-
-  <button id="connect">Connect</button>
-  <button id="call">Call</button>
-  <button id="hangup">Hangup</button>
-</div>
--->
-<!--
-
-var ph = require("phoenix_html");
-var output = '';
-for (var property in ph) {
-          console.log(property + ":" + ph[property]);
-          output += property+'; ';
-        }
-        alert(output);
-
-
-
-<script src="<%= static_path(@conn, "/js/codemirror/addon/edit/matchbrackets.js") %>"></script>
-
-<script src="<%= static_path(@conn, "/js/codemirror/addon/hint/show-hint.js") %>"></script>
-<script src="<%= static_path(@conn, "/js/codemirror/addon/selection/active-line.js") %>"></script>
-<script src="<%= static_path(@conn, "/js/codemirror/mode/clike/clike.js") %>"></script>
-<script>
-var room = "<%= @room %>";
-var user = "<%= @user %>";
-
-
-// To use Phoenix channels, the first step is to import Socket
-// and connect at the socket path in "lib/web/endpoint.ex":
-socket.connect();
-
-// Now that you are connected, you can join channels with a topic:
-var channel = socket.channel("room:" + room, {});
-
-var chatInput = document.querySelector("#chat-input");
-var messagesContainer = document.querySelector("#messages");
-var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-  //dragDrop: false,
-  styleActiveLine: true,
-  styleSelectedText: true,
-  lineNumbers: true,
-  extraKeys: {"Ctrl-Space": "autocomplete"},
-  mode: "text/x-csrc"
-});
-
-
-chatInput.addEventListener("keypress", function (event) {
-  if (event.keyCode === 13) {
-    channel.push("new_msg", { body: chatInput.value });
-    chatInput.value = "";
-  }
-});
-
-var userMarkers = {};
-// Receive new message from channel
-channel.on("new_msg", function (payload) {
-  if (payload.user == null || payload.user == user) {
-    console.log("received from same user: " + payload.user);
-    return;
-  }
-  console.log("received payload: " + payload);
-  var output = '';
-  var entry = payload;
-  for (var property in entry) {
-    output += property + ":" + entry[property] + '; ';
-  }
-  output += "---";
-  var entry = payload.body;
-  for (var property in entry) {
-    output += property + ":" + entry[property] + '; ';
-  }
-  console.log(output);
-  switch(payload.body.origin) {
-  case "+input":
-  case "+delete":
-  case "paste":
-  case "undo":
-  case "cut":
-  case "drag":
-    editor.replaceRange(payload.body.text, payload.body.from, payload.body.to);
-    break;
-  case "select":
-    if (userMarkers[payload.user] != null) {
-      userMarkers[payload.user].clear();
-    }
-    userMarkers[payload.user] = editor.getDoc().markText({line: payload.body.from.line, ch: payload.body.from.ch}, 
-                                    {line: payload.body.to.line, ch: payload.body.to.ch}, {css: "background : yellow"});
-    break;
-  case "unselect":
-    userMarkers[payload.user].clear();
-    break;
-  default:
-    console.log("Received unknown origin" + payload.body.origin);
-    alert(payload.body.origin)
-  }
-});
-
-channel.join().receive("ok", function (resp) {
-  console.log("Joined successfully", resp);
-}).receive("error", function (resp) {
-  console.log("Unable to join", resp);
-});
-
-
-// On editor change
-editor.on("change", function(cm, changeObj) {
-  if (changeObj["origin"] == null) {
-    return;
-  }
-  var output = '';
-  for (var property in changeObj) {
-    output += property + ":" + changeObj[property] +'; ';
-  }
-  console.log("----- " + output +" ------");
-  channel.push("new_msg", {user: user, body: changeObj})
-});
-console.log("*** Marking text *** ");
-  console.log("*** Marked text *** ");
-var selected = false;
-var selectFrom;
-var selectTo;
-editor.on("cursorActivity", function(cm) {
-  if (cm.somethingSelected()) {
-    selected = true;
-    var selFrom = cm.getCursor("from");
-    if(selectFrom != null && selFrom.line != selectFrom.line && selFrom.ch != selectFrom.ch) {
-    log(selFrom);
-    log(selectFrom);  
-      console.log("-- removed selection due to another select?--- ");
-      channel.push("new_msg", {user: user, body: {origin: "unselect", from: selectFrom, to: selectTo}});
-    }
-    selectFrom = selFrom;
-    selectTo = cm.getCursor("to");
-    console.log("--selected--- ");
-    channel.push("new_msg", {user: user, body: {origin: "select", from: selectFrom, to: selectTo}})
-  } else if (selected) {
-    console.log("-- removed selection--- ");
-    selected = false;
-    channel.push("new_msg", {user: user, body: {origin: "unselect", from: selectFrom, to: selectTo}})
-    selectFrom = selectTo = null
-  }
-});
-
-function log(object) {
-  var output = '';
-  for (var property in object) {
-    output += property + ":" + object[property] +'; ';
-  }
-  console.log("----- " + output +" ------");
-}
-</script>
--->
-
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+  <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+</body

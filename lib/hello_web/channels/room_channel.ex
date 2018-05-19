@@ -124,8 +124,8 @@ defmodule HelloWeb.RoomChannel do
     {:reply, {:ok, %{msg: msg["body"]}}, socket}
   end
 
-  def handle_in("message", %{"body" => body}, socket) do
-    broadcast!(socket, "message", %{body: body})
+  def handle_in("msg:new", msg, socket) do
+    broadcast_from!(socket, "msg:new", msg)
     {:noreply, socket}
   end
 
